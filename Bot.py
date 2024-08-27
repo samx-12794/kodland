@@ -123,4 +123,33 @@ async def duck(ctx):
     image_url = get_duck_image_url()
     await ctx.send(image_url)
 
+@bot.command()
+async def futbol(ctx):
+    await ctx.send(f"""Hola, soy un bot {bot.user}!""")# esta linea saluda
+    await ctx.send(f'Te voy hablar un poco sobre la historia del futbol')
+    await ctx.send(f'El futbol es uno de los deportes mas conocidos en el mundo')
+    # Enviar una pregunta al usuario
+    await ctx.send("¿Quieres saber mas del futbol? responde:'sí' o 'no'.")
+# Esperar la respuesta del usuario
+    def check(message):
+        return message.author == ctx.author and message.channel == ctx.channel and message.content in ['sí', 'si', 'no']
+    response = await bot.wait_for('message', check=check)
+    if response:
+        if response.content in ['sí', 'si']:
+            await ctx.send("1. El futbol se oficializó en 1863")
+            await ctx.send("2. El maximo goleador de la historia del futbol es Cristiano Ronaldo con 899 y contando")   
+        else:
+            await ctx.send("Está bien, si alguna vez quieres saber un poco mas de la historia de este gran deporte, no dudes en preguntar.")
+    else:
+        await ctx.send("Lo siento, no pude entender tu respuesta. Inténtalo de nuevo.")
+    await ctx.send("¿Quieres saber quien es el jugador con mas mundiales ganados en la historia del futbol? responde: 'si' o 'no'.")
+    response1 = await bot.wait_for('message', check=check)
+    if response1:
+        if response1.content in ['sí', 'si']:
+            await ctx.send("El jugador con mas mundiales ganados en la historia del futbol es Pele con 3 mundiales") 
+        else:
+            await ctx.send("Está bien, si alguna vez quieres saber, no dudes en preguntar.")
+    else:
+        await ctx.send("Lo siento, no pude entender tu respuesta. Inténtalo de nuevo.")
+
 bot.run("YOUR TOKEN")
