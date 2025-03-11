@@ -3,6 +3,7 @@ import os
 from discord.ext import commands
 import random
 import requests
+import settings
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -152,4 +153,27 @@ async def futbol(ctx):
     else:
         await ctx.send("Lo siento, no pude entender tu respuesta. Inténtalo de nuevo.")
 
-bot.run("YOUR TOKEN")
+@bot.command()
+async def poke(ctx,arg):
+    try:
+        pokemon = arg.split(" ",1)[0].lower()
+        result = requests.get("https://pokeapi.co/api/v2/pokemon/"+pokemon)
+        if result.text == "Not Found":
+            await ctx.send("Pokemon no encontrado")
+        else:
+            image_url = result.json()["sprites"]["front_default"]
+            print(image_url)
+            await ctx.send(image_url)
+    except Exception as e:
+        print("Error:", e)
+@poke.error
+async def error_type(ctx,error):
+    if isinstance(error,commands.errors.MissingRequiredArgument):
+        await ctx.send("Tienes que darme un pokemon")
+
+@bot.command()
+async def limpiar(ctx):
+    await ctx.channel.purge()
+    await ctx.send("Mensajes eliminados", delete_after = 3)
+
+bot.run(settings.TOKEN)
